@@ -1,9 +1,10 @@
 Dim MyExcel
-Set MyExcel = GetObject("\\C:\VBSTest.xls")
+Set MyExcel = GetObject("\\vmware-host\Shared Folders\Desktop\Test.xlsm")
 
+''
 strComputer = "."
 '// Note 4 forward slashes!
-strDirToMonitor = "::{031E4825-7B94-4DC3-B131-E946B44C8DD5}"
+strDirToMonitor = "C:\\\\Data1\SnDResponses\"
 '// Monitor Above every 10 secs...
 strTime = "10"
 
@@ -48,4 +49,10 @@ Do While True
                 objEventObject.TargetInstance.PartComponent
             Exit Do
     End Select
+    FileChange = StrReverse(objEventObject.TargetInstance.PartComponent)
+    FileChange = StrReverse(Left(FileChange, InStr(FileChange, "\")-1))
+    FileChange = Mid(FileChange, 1, Len(FileChange)-1)
+    With MyExcel.Worksheets(1)
+         .Range("A65536").End(-4162).Offset(1, 0).Value = strchange & FileChange
+    End With
 Loop
